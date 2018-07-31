@@ -2,33 +2,34 @@ import os
 import urllib.request
 import urllib.request
 
-try:
-    from bs4 import BeautifulSoup
-except Exception as e:
-    print("Pls install BeautifulSoup 4")
+if __name__ == '__main__':
 
-url = input('[+] Enter the url: ')
+    try:
+        from bs4 import BeautifulSoup
+    except Exception as e:
+        print("Pls install BeautifulSoup 4")
 
-try:
+    url = input('[+] Enter the url: ')
 
-    i = 0
-    html = urllib.request.urlopen(url)
-    soup = BeautifulSoup(html.read(), 'html.parser')
-    for tag in soup.findAll('a', href=True):
+    try:
 
-        if os.path.splitext(os.path.basename(tag['href']))[1] == '.pdf':
-            current = urllib.request.urlopen(tag['href'])
+        i = 0
+        html = urllib.request.urlopen(url)
+        soup = BeautifulSoup(html.read(), 'html.parser')
+        for tag in soup.findAll('a', href=True):
 
-            print("\n[*] Downloading: %s" % (os.path.basename(tag['href'])))
+            if os.path.splitext(os.path.basename(tag['href']))[1] == '.pdf':
+                current = urllib.request.urlopen(tag['href'])
 
-            f = open(os.path.basename(tag['href']), "wb")
-            f.write(current.read())
-            f.close()
-            i += 1
+                print("\n[*] Downloading: %s" % (os.path.basename(tag['href'])))
 
-    print("\n[*] Downloaded %d files" % (i))
-    input("[+] Press any key to exit...")
+                f = open(os.path.basename(tag['href']), "wb")
+                f.write(current.read())
+                f.close()
+                i += 1
 
+        print("\n[*] Downloaded %d files" % (i))
+        input("[+] Press any key to exit...")
 
-except Exception as e:
-    print(e)
+    except Exception as e:
+        print(e)
